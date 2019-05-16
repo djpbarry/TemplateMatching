@@ -9,6 +9,7 @@ import TemplateMatching.AnalysePlate;
 import IO.File.ImageFilter;
 import IO.PropertyWriter;
 import Math.Optimisation.Plate;
+import Revision.Revision;
 import UIClasses.GUIMethods;
 import UIClasses.PropertyExtractor;
 import UIClasses.UIMethods;
@@ -18,6 +19,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import java.awt.Container;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Properties;
 
 /**
@@ -51,7 +53,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
     private static double angle;
     private static double spatRes = 1.0;
     private static double shrinkFactor = 1.0;
-    private final String TITLE = "Plate Analyser";
+    public static String TITLE = String.format("Plate Analyser v%d.%s", Revision.VERSION, new DecimalFormat("000").format(Revision.revisionNumber));
     private Properties props;
     private static File inputDirectory;
     private ImagePlus imp;
