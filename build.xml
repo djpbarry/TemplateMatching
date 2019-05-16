@@ -70,9 +70,11 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <!--
     <property name="pluginsDir"  location="C:\Users\barryd\FIJI\DEV\Fiji.app\plugins" />
     <target name="-post-jar">
-        <echo message="--Copied JAR to pluginsDir: ${pluginsDir}" />
+        <echo message="Copied JAR to pluginsDir: ${pluginsDir}" />
         <copy file="${basedir}/${dist.jar}" toDir="${pluginsDir}" />
     </target>
+    -->
 </project>
