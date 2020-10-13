@@ -6,7 +6,6 @@
 package ui;
 
 import TemplateMatching.AnalysePlate;
-import Revision.Revision;
 import TemplateMatching.Plate;
 import ij.IJ;
 import ij.ImagePlus;
@@ -18,13 +17,11 @@ import net.calm.iaclasslibrary.UIClasses.UIMethods;
 import net.calm.iaclasslibrary.UtilClasses.GenUtils;
 import net.calm.iaclasslibrary.UtilClasses.Utilities;
 
-import java.awt.Container;
+import java.awt.*;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.Properties;
 
 /**
- *
  * @author David Barry <david.barry at crick dot ac dot uk>
  */
 public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
@@ -54,7 +51,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
     private static double angle;
     private static double spatRes = 1.0;
     private static double shrinkFactor = 1.0;
-    public static String TITLE = String.format("Plate Analyser v%d.%s", Revision.VERSION, new DecimalFormat("000").format(Revision.revisionNumber));
+    public static String TITLE = "Plate Analyser";
     private final Properties props;
     private static File inputDirectory;
     private ImagePlus imp;
@@ -115,7 +112,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         setMinimumSize(new java.awt.Dimension(550, 550));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        directorySelectTextField.setText(inputDirectory!=null ? inputDirectory.getAbsolutePath() : "Select input directory...");
+        directorySelectTextField.setText(inputDirectory != null ? inputDirectory.getAbsolutePath() : "Select input directory...");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -581,6 +578,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         }
         this.dispose();
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel angleLabel;
     private javax.swing.JTextField angleTextField;
