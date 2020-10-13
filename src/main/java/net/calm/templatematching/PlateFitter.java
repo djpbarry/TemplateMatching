@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TemplateMatching;
+package net.calm.templatematching;
 
 import ij.ImageStack;
 import ij.process.ImageProcessor;

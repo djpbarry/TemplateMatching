@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TemplateMatching;
+package net.calm.templatematching;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.calm.iaclasslibrary.IO.DataWriter;
 import net.calm.iaclasslibrary.IO.File.ImageFilter;
-import ui.PlateFitterUI;
+import net.calm.templatematching.ui.PlateFitterUI;
 
 /**
  *

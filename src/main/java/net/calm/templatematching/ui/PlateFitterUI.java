@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package net.calm.templatematching.ui;
 
-import TemplateMatching.AnalysePlate;
-import TemplateMatching.Plate;
+import net.calm.templatematching.AnalysePlate;
+import net.calm.templatematching.Plate;
 import ij.IJ;
 import ij.ImagePlus;
 import net.calm.iaclasslibrary.IO.File.ImageFilter;
