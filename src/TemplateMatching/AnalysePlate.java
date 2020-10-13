@@ -7,25 +7,18 @@ package TemplateMatching;
 
 import IO.DataWriter;
 import IO.File.ImageFilter;
-import Math.Optimisation.Plate;
-import Math.Optimisation.PlateFitter;
 import ij.IJ;
 import ij.ImagePlus;
-import ij.gui.Roi;
-import ij.measure.Measurements;
+import ij.ImageStack;
 import ij.measure.ResultsTable;
-import ij.plugin.RoiScaler;
-import ij.plugin.filter.Analyzer;
 import ij.process.ImageProcessor;
-import java.awt.Rectangle;
+import ij.process.StackProcessor;
 import java.io.File;
-import java.util.LinkedList;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import ui.PlateFitterUI;
-
 
 /**
  *
@@ -100,28 +93,29 @@ public class AnalysePlate {
             ImageProcessor output = imp.duplicate().getProcessor();
             output.setValue(0);
             output.setLineWidth(3);
-            ImageProcessor ip = imp.getProcessor().resize((int) Math.round(imp.getWidth() * shrinkFactor));
-            PlateFitter fitter = new PlateFitter(ip, rows, cols, wellRad * shrinkFactor, xBuff * shrinkFactor, yBuff * shrinkFactor, interWellSpacing * shrinkFactor, wellFraction);
+            ImageStack stack = imp.getImageStack();
+            ImageStack resizedStack = (new StackProcessor(stack)).resize((int) Math.round(imp.getWidth() * shrinkFactor), (int) Math.round(imp.getHeight() * shrinkFactor));
+            PlateFitter fitter = new PlateFitter(resizedStack, rows, cols, wellRad * shrinkFactor, xBuff * shrinkFactor, yBuff * shrinkFactor, interWellSpacing * shrinkFactor, wellFraction);
             fitter.doFit();
-            double[] p = fitter.getParams();
-            System.out.println(String.format("%s - X: %f, Y: %f, Theta: %f, Corr: %f", fileName, p[0] * spatRes / shrinkFactor, p[1] * spatRes / shrinkFactor, p[2], p[3]));
-            LinkedList<Roi> rois = fitter.getPlateTemplate().drawRoi(p[0], p[1], p[2]);
-            int nRois = rois.size();
-            int count = 1;
-            for (int i = nRois - 1; i >= 0; i--) {
-                if (rois.get(i).getProperty(Plate.PLATE_COMPONENT).contentEquals(Plate.SHRUNK_WELL)) {
-                    Roi well = RoiScaler.scale(rois.get(i), 1.0 / shrinkFactor, 1.0 / shrinkFactor, false);
-                    imp.setRoi(well);
-                    output.draw(well);
-                    Rectangle wellBounds = well.getBounds();
-                    int x0 = wellBounds.x + wellBounds.height / 2;
-                    int y0 = wellBounds.y + wellBounds.width / 2;
-                    output.drawString(String.valueOf(count++), x0, y0);
-                    (new Analyzer(imp, Measurements.MEAN + Measurements.LABELS, rt)).measure();
-                    rt.addValue("Well Index", (count - 1));
-                }
-            }
-            IJ.saveAs(new ImagePlus("", output), "PNG", String.format("%s%s%s%s%s", outputDirectory.getAbsolutePath(), File.separator, "Result_", imp.getTitle(), ".png"));
+
+//            System.out.println(String.format("%s - X: %f, Y: %f, Theta: %f, Corr: %f", fileName, p[0] * spatRes / shrinkFactor, p[1] * spatRes / shrinkFactor, p[2], p[3]));
+//            LinkedList<Roi> rois = fitter.getPlateTemplate().drawRoi(p[0], p[1], p[2]);
+//            int nRois = rois.size();
+//            int count = 1;
+//            for (int i = nRois - 1; i >= 0; i--) {
+//                if (rois.get(i).getProperty(Plate.PLATE_COMPONENT).contentEquals(Plate.SHRUNK_WELL)) {
+//                    Roi well = RoiScaler.scale(rois.get(i), 1.0 / shrinkFactor, 1.0 / shrinkFactor, false);
+//                    imp.setRoi(well);
+//                    output.draw(well);
+//                    Rectangle wellBounds = well.getBounds();
+//                    int x0 = wellBounds.x + wellBounds.height / 2;
+//                    int y0 = wellBounds.y + wellBounds.width / 2;
+//                    output.drawString(String.valueOf(count++), x0, y0);
+//                    (new Analyzer(imp, Measurements.MEAN + Measurements.LABELS, rt)).measure();
+//                    rt.addValue("Well Index", (count - 1));
+//                }
+//            }
+//            IJ.saveAs(new ImagePlus("", output), "PNG", String.format("%s%s%s%s%s", outputDirectory.getAbsolutePath(), File.separator, "Result_", imp.getTitle(), ".png"));
         }
     }
 }

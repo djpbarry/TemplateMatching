@@ -62,6 +62,8 @@ public class TemplateMatcher implements MacroExtension {
         LogStream.redirectSystemOut("");
         int width = image.getWidth();
         int height = image.getHeight();
+        int eHeight = (int) Math.round(height * 1.1);
+        int eWidth = (int) Math.round(width * 1.1);
         int depth = image.getSize();
         int tw = template.getWidth();
         int th = template.getHeight();
@@ -76,21 +78,24 @@ public class TemplateMatcher implements MacroExtension {
                 System.out.println(String.format("Processing slice %d of %d", z, depth));
                 ExecutorService exec = Executors.newFixedThreadPool(nProcessors);
                 ImageProcessor slice = image.getProcessor(z);
-                FloatProcessor output = new FloatProcessor(width, height);
+                ImageProcessor expandedImage = slice.createProcessor(eWidth, eHeight);
+                expandedImage.noise(25);
+                expandedImage.insert(slice, (eWidth - width) / 2, (eHeight - height) / 2);
+                FloatProcessor output = new FloatProcessor(eWidth, eHeight);
                 output.setValue(0.0);
                 output.fill();
-                for (int y = y0; y < height - y0 - 1; y++) {
-                    for (int x = x0; x < width - x0 - 1; x++) {
+                for (int y = 0; y < eHeight; y++) {
+                    for (int x = 0; x < eWidth; x++) {
                         Rectangle roi = new Rectangle(x - x0, y - y0, tw, th);
-                        slice.setRoi(roi);
-                        ImageProcessor croppedImage = slice.crop();
-                        exec.submit(new Correlation(croppedImage, template, new ImageProcessor[]{output, null}, new int[]{x, y}, Correlation.PEARSONS));
+                        expandedImage.setRoi(roi);
+                        exec.submit(new Correlation(expandedImage.crop(), template, new ImageProcessor[]{output, null}, new int[]{x, y}, Correlation.PEARSONS));
                     }
                 }
                 exec.shutdown();
                 exec.awaitTermination(12, TimeUnit.HOURS);
                 findCorrelationMaxima(overlay, output, z);
-                IJ.saveAs(new ImagePlus("", output), "TIF", "D:\\OneDrive - The Francis Crick Institute\\Working Data\\Sahai\\Karin\\corr");
+                IJ.saveAs(new ImagePlus("", expandedImage), "TIF", "D:/debugging/eImage.tiff");
+                IJ.saveAs(new ImagePlus("", output), "TIF", "D:/debugging/corr.tiff");
             }
             ImagePlus finalResult = new ImagePlus("", image);
             finalResult.setOverlay(overlay);

@@ -54,7 +54,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
     private static double spatRes = 1.0;
     private static double shrinkFactor = 1.0;
     public static String TITLE = String.format("Plate Analyser v%d.%s", Revision.VERSION, new DecimalFormat("000").format(Revision.revisionNumber));
-    private Properties props;
+    private final Properties props;
     private static File inputDirectory;
     private ImagePlus imp;
 
@@ -65,6 +65,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         initComponents();
         this.setTitle(TITLE);
         UIMethods.centreContainer(this);
+        props = new Properties();
     }
 
     /**
@@ -311,6 +312,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         getContentPane().add(previewButton, gridBagConstraints);
 
         xPosLabel.setText(X_POS);
+        xPosLabel.setLabelFor(xPosTextField);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -333,6 +335,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         getContentPane().add(xPosTextField, gridBagConstraints);
 
         yPosLabel.setText(Y_POS);
+        yPosLabel.setLabelFor(yPosTextField);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
@@ -355,6 +358,7 @@ public class PlateFitterUI extends javax.swing.JFrame implements GUIMethods {
         getContentPane().add(yPosTextField, gridBagConstraints);
 
         angleLabel.setText(ANGLE);
+        angleLabel.setLabelFor(angleTextField);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
